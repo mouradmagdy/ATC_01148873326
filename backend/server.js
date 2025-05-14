@@ -1,0 +1,29 @@
+const express = require("express");
+const cors = require("cors");
+const http = require("http");
+const dotenv = require("dotenv");
+const cookieParser = require("cookie-parser");
+const connectToMongoDB = require("./db/connectToMongoDB");
+const authRoutes = require("./routes/auth-routes");
+
+dotenv.config();
+
+const app = express();
+const allowdOrigins = ["http://localhost:3000"];
+
+app.use(
+  cors({
+    origin: allowdOrigins,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
+app.use(express.json()); // to parse JSON bodies
+app.use(cookieParser()); // to parse cookies
+app.use("/api/auth", authRoutes);
+const PORT = 5000;
+const server = http.createServer(app);
+server.listen(PORT, () => {
+  connectToMongoDB();
+  console.log(`Server is running on port ${PORT}`);
+});
