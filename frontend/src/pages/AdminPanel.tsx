@@ -20,43 +20,41 @@ function AdminPanel() {
   const processData = useCallback(
     (data) => {
       let filteredData = [...data];
-      // // search
-      // if (debouncedSearchValue) {
-      //   const searchLower = debouncedSearchValue.toLowerCase();
-      //   filteredData = filteredData.filter(
-      //     (patient) =>
-      //       patient.name.toLowerCase().includes(searchLower) ||
-      //       patient.email.toLowerCase().includes(searchLower)
-      //   );
-      // }
+      // search
+      if (debouncedSearchValue) {
+        const searchLower = debouncedSearchValue.toLowerCase();
+        filteredData = filteredData.filter(
+          (event) =>
+            event.name.toLowerCase().includes(searchLower) ||
+            event.venue.toLowerCase().includes(searchLower)
+        );
+      }
 
       // sort
-      // if (sortBy) {
-      //   const [field, order] = sortBy.split("-");
-      //   filteredData.sort((a, b) => {
-      //     const isAsc = order === "asc" ? 1 : -1;
-      //     if (field === "name") {
-      //       return isAsc * a.name.localeCompare(b.name);
-      //     } else if (field === "age") {
-      //       const ageA = new Date(a.dateOfBirth);
-      //       const ageB = new Date(b.dateOfBirth);
-      //       return -1 * isAsc * (ageA.getTime() - ageB.getTime());
-      //     } else if (field === "createdAt") {
-      //       const createdAtA = new Date(a.createdAt);
-      //       const createdAtB = new Date(b.createdAt);
-      //       return isAsc * (createdAtA.getTime() - createdAtB.getTime());
-      //     }
-      //     return 0;
-      //   });
-      // }
+      if (sortBy) {
+        const [field, order] = sortBy.split("-");
+        filteredData.sort((a, b) => {
+          const isAsc = order === "asc" ? 1 : -1;
+          if (field === "name") {
+            return isAsc * a.name.localeCompare(b.name);
+          } else if (field === "price") {
+            return isAsc * (a.price - b.price);
+          } else if (field === "date") {
+            const dateA = new Date(a.date).getTime();
+            const dateB = new Date(b.date).getTime();
+            return isAsc * (dateA - dateB);
+          }
+          return 0;
+        });
+      }
       return filteredData;
     },
-    [sortBy]
+    [sortBy, debouncedSearchValue]
   );
 
   const processedData = useMemo(
-    () => processData(data?.data || []),
-    [data?.data, processData]
+    () => processData(data?.events || []),
+    [data?.events, processData]
   );
 
   if (isPending) {
@@ -87,7 +85,6 @@ function AdminPanel() {
     <>
       <div className="flex">
         <TableFilters
-          // addContent="event"
           searchValue={searchValue}
           setSearchValue={(value) => {
             setSearchValue(value);

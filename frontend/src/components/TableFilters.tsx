@@ -85,62 +85,64 @@ const TableFilters = ({
 
   return (
     <>
-      {/*Sort By Select*/}
-      <Select value={sortBy} onValueChange={setSortBy}>
-        <SelectTrigger className="w-[200px] cursor-pointer">
-          <SelectValue placeholder="Sort by" />
-        </SelectTrigger>
-        <SelectContent className="z-auto bg-sidebar-background text-sidebar-foreground border-sidebar-background cursor-pointer ">
-          <SelectGroup>
-            <SelectLabel>Name</SelectLabel>
-            <SelectItem className="cursor-pointer" value="name-asc">
-              Sort by name (A-Z)
-            </SelectItem>
-            <SelectItem className="cursor-pointer" value="name-desc">
-              Sort by name (Z-A)
-            </SelectItem>
-            <SelectSeparator />
-          </SelectGroup>
-          <SelectGroup>
-            <SelectLabel>Age</SelectLabel>
-            <SelectItem className="cursor-pointer" value="age-asc">
-              Sort by age (0-99)
-            </SelectItem>
-            <SelectItem className="cursor-pointer" value="age-desc">
-              Sort by age (99-0)
-            </SelectItem>
-            <SelectSeparator />
-          </SelectGroup>
-          <SelectGroup>
-            <SelectLabel>Joining</SelectLabel>
-            <SelectItem className="cursor-pointer" value="createdAt-asc">
-              Oldest first
-            </SelectItem>
-            <SelectItem className="cursor-pointer" value="createdAt-desc">
-              Newest first
-            </SelectItem>
-            <SelectSeparator />
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-      {/*Search Input*/}
-      <Input
-        placeholder="Search by name or by email address"
-        value={searchValue}
-        onChange={(e) => setSearchValue(e.target.value)}
-      />
-      {/*Add Patient Button*/}
-      <Button
-        onClick={() => setOpenModal(!openModal)}
-        className="bg-primary text-primary-foreground hover:bg-muted hover:text-muted-foreground"
-      >
-        <Plus />
-        {addContent}{" "}
-      </Button>
+      <div className="flex items-center justify-between gap-4 flex-grow mb-5">
+        {/*Sort By Select*/}
+        <Select value={sortBy} onValueChange={setSortBy}>
+          <SelectTrigger className="w-[200px] cursor-pointer">
+            <SelectValue placeholder="Sort by" />
+          </SelectTrigger>
+          <SelectContent className="z-auto  cursor-pointer ">
+            <SelectGroup>
+              <SelectLabel>Name</SelectLabel>
+              <SelectItem className="cursor-pointer" value="name-asc">
+                Sort by name (A-Z)
+              </SelectItem>
+              <SelectItem className="cursor-pointer" value="name-desc">
+                Sort by name (Z-A)
+              </SelectItem>
+              <SelectSeparator />
+            </SelectGroup>
+            <SelectGroup>
+              <SelectLabel>price</SelectLabel>
+              <SelectItem className="cursor-pointer" value="price-asc">
+                Lowest to highest{" "}
+              </SelectItem>
+              <SelectItem className="cursor-pointer" value="price-desc">
+                Highest to lowest{" "}
+              </SelectItem>
+              <SelectSeparator />
+            </SelectGroup>
+            <SelectGroup>
+              <SelectLabel>Date</SelectLabel>
+              <SelectItem className="cursor-pointer" value="date-asc">
+                Nearest{" "}
+              </SelectItem>
+              <SelectItem className="cursor-pointer" value="date-desc">
+                Farthest{" "}
+              </SelectItem>
+              <SelectSeparator />
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+        {/*Search Input*/}
+        <Input
+          placeholder="Search by name or by email address"
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+        />
+        {/*Add Patient Button*/}
+        <Button
+          onClick={() => setOpenModal(!openModal)}
+          className="bg-primary text-primary-foreground hover:bg-muted hover:text-muted-foreground"
+        >
+          <Plus />
+          {addContent}{" "}
+        </Button>
+      </div>
 
       {/*Add Patient Modal*/}
       <Dialog open={openModal} onOpenChange={(value) => setOpenModal(value)}>
-        <DialogContent className="bg-sidebar-background border-black  ">
+        <DialogContent>
           <DialogHeader>
             <DialogTitle className="text-muted-foreground">
               Add Event

@@ -15,10 +15,10 @@ const DetailsCell = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="cursor-pointer text-2xl bg-inherit shadow-none text-sidebar-foreground border-none">
+      <DropdownMenuTrigger className="cursor-pointer text-2xl bg-inherit shadow-none  border-none">
         ...
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="bg-sidebar-background w-40 text-sidebar-foreground border-muted border rounded shadow-lg z-50 fixed -right-4">
+      <DropdownMenuContent className=" w-40  border-muted border rounded shadow-lg z-50 fixed -right-4">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer flex items-center">
@@ -41,6 +41,13 @@ export const columns = [
     header: "Name",
     cell: ({ row }) => (
       <div className="flex items-center space-x-3">
+        <div className="h-10 w-10 rounded-full bg-muted text-muted-foreground flex items-center justify-center">
+          <img
+            src={row.original.image}
+            alt={row.original.name}
+            className="h-full w-full rounded-full"
+          />
+        </div>
         <div>
           <p className="font-medium">{row.original.name}</p>
         </div>
@@ -50,12 +57,10 @@ export const columns = [
   {
     accessorKey: "category",
     header: "Category",
-    cell: ({ getValue }) => (
-      <span
-        className={`px-2 py-1 rounded-full text-xs font-medium 
-         `}
-      >
-        {getValue()}
+    cell: ({ row }) => (
+      <span className={`px-2 py-1 rounded-full text-sm  `}>
+        {/* {getValue()} */}
+        {row.original.category}
       </span>
     ),
   },
