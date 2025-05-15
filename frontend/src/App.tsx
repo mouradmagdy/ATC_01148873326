@@ -12,6 +12,8 @@ import Signup from "./pages/Signup";
 import ThemedToaster from "./components/ThemedToaster";
 import { AuthContextProvider } from "./context/AuthContext";
 import Profile from "./pages/Profile";
+import PrivateRoute from "./components/PrivateRoute";
+import PageNotFound from "./pages/PageNotFound";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -38,12 +40,13 @@ function App() {
                 <Route
                   path="/admin"
                   element={
-                    // <PrivateRoute>
-                    <AdminPanel />
-                    // </PrivateRoute>
+                    <PrivateRoute>
+                      <AdminPanel />
+                    </PrivateRoute>
                   }
                 />
                 <Route path="/congratulations" element={<Congratulations />} />
+                <Route path="*" element={<PageNotFound />} />
               </Route>
             </Routes>
           </BrowserRouter>

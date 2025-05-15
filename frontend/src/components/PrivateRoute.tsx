@@ -1,7 +1,23 @@
-import React from "react";
+import { useAuthContext } from "@/context/AuthContext";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-const PrivateRoute = () => {
-  return <div>PrivateRoute</div>;
+const PrivateRoute = ({ children }) => {
+  const { authUser } = useAuthContext();
+  const navigate = useNavigate();
+  console.log(authUser);
+  useEffect(() => {
+    if (!authUser || authUser.role !== "admin") {
+      navigate("/login");
+    }
+  });
+
+  //  const { user, loading } = React.useContext(AuthContext);
+  // if (loading) return <div>Loading...</div>;
+  // if (!user || user.role !== 'Admin') return <Navigate to="/" />;
+  // return children;
+
+  return <div>{children}</div>;
 };
 
 export default PrivateRoute;
