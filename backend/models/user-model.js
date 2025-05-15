@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema(
   {
     fullName: {
@@ -14,13 +14,13 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       minlength: [8, "Password must be at least 8 characters"],
-      validate: {
-        validator: function (v) {
-          return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(v);
-        },
-        message:
-          "Password must contain at least one uppercase letter, one lowercase letter, and one number",
-      },
+      // validate: {
+      //   validator: function (v) {
+      //     return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(v);
+      //   },
+      //   message:
+      //     "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+      // },
     },
     gender: {
       type: String,

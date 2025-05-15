@@ -1,8 +1,11 @@
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const User = require("../models/user-model");
+const generateTokenAndSetCookie = require("../utils/generate-token");
+
 const signup = async (req, res) => {
   try {
-    const { fullName, username, password, confirmPassword, role } = req.body;
+    const { fullName, username, password, confirmPassword, role, gender } =
+      req.body;
     if (password !== confirmPassword) {
       return res.status(400).json({ message: "Passwords do not match" });
     }
@@ -29,7 +32,7 @@ const signup = async (req, res) => {
       password: hashedPassword,
       gender,
       role,
-      profilePic: gender === "male" ? boyProfilePic : girlProfilePic,
+      profilePicture: gender === "male" ? boyProfilePic : girlProfilePic,
     });
     if (newUser) {
       generateTokenAndSetCookie(newUser._id, res);
@@ -39,6 +42,7 @@ const signup = async (req, res) => {
         fullName: newUser.fullName,
         username: newUser.username,
         profilePic: newUser.profilePic,
+        gender: newUser.gender,
       });
     } else {
       res.status(400).json({ error: "Invalid user data" });
@@ -67,8 +71,9 @@ const login = async (req, res) => {
       _id: user._id,
       fullName: user.fullName,
       username: user.username,
-      profilePic: user.profilePic,
+      profilePicture: user.profilePicture,
       role: user.role,
+      gender: user.gender,
     });
   } catch (error) {
     console.log("Error in login controller", error.message);
