@@ -35,9 +35,11 @@ function Login() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const userData = await loginAPI(values.username, values.password);
+    console.log(userData);
     if (!userData) return;
-    localStorage.setItem("user", JSON.stringify(userData));
+    // localStorage.setItem("user", JSON.stringify(userData));
     setAuthUser(userData);
+    navigate("/home");
   }
 
   return (
