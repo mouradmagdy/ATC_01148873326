@@ -61,15 +61,11 @@ function Signup() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-xl border shadow-xl p-8 space-y-6">
+    <div className="max-h-screen  flex items-center justify-center p-4">
+      <div className="max-w-md w-full  rounded-xl border shadow-xl p-8 space-y-6">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Create an Account
-          </h1>
-          <p className="mt-2 text-gray-600">
-            Join us today! Enter your details to sign up.
-          </p>
+          <h1 className="text-3xl font-bold ">Create an Account</h1>
+          <p className="mt-2 ">Join us today! Enter your details to sign up.</p>
         </div>
 
         <Form {...form}>
@@ -79,10 +75,10 @@ function Signup() {
               control={form.control}
               name="fullName"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="text-left">
                   <FormLabel>Name</FormLabel>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2  h-5 w-5" />
                     <FormControl>
                       <Input
                         {...field}
@@ -102,10 +98,10 @@ function Signup() {
               control={form.control}
               name="username"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="text-left">
                   <FormLabel>Username</FormLabel>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2  h-5 w-5" />
                     <FormControl>
                       <Input
                         {...field}
@@ -125,10 +121,10 @@ function Signup() {
               control={form.control}
               name="password"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="text-left">
                   <FormLabel>Password</FormLabel>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2  h-5 w-5" />
                     <FormControl>
                       <Input
                         {...field}
@@ -146,10 +142,10 @@ function Signup() {
               control={form.control}
               name="confirmPassword"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="text-left">
                   <FormLabel>Confirm Password</FormLabel>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2  h-5 w-5" />
                     <FormControl>
                       <Input
                         {...field}
@@ -171,7 +167,7 @@ function Signup() {
         </Form>
 
         <div className="text-center">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm ">
             Already have an account?{" "}
             <button
               onClick={() => navigate("/login")}

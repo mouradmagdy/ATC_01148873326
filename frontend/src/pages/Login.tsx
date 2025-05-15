@@ -34,7 +34,6 @@ function Login() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
     const userData = await loginAPI(values.username, values.password);
     if (!userData) return;
     localStorage.setItem("user", JSON.stringify(userData));
@@ -42,13 +41,11 @@ function Login() {
   }
 
   return (
-    <div className="h-screen  flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-xl border shadow-xl p-8 space-y-6">
+    <div className="max-h-screen  flex items-center justify-center p-4">
+      <div className="max-w-md w-full  rounded-xl border shadow-xl p-8 space-y-6">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">Welcome Back</h1>
-          <p className="mt-2 text-gray-600">
-            Please enter your details to login
-          </p>
+          <h1 className="text-3xl font-bold ">Welcome Back</h1>
+          <p className="mt-2 ">Please enter your details to login</p>
         </div>
 
         <Form {...form}>
@@ -57,10 +54,10 @@ function Login() {
               control={form.control}
               name="username"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="text-left">
                   <FormLabel>Username</FormLabel>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2  h-5 w-5" />
                     <FormControl>
                       <Input
                         {...field}
@@ -79,10 +76,10 @@ function Login() {
               control={form.control}
               name="password"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
+                <FormItem className="text-left">
+                  <FormLabel className="">Password</FormLabel>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2  h-5 w-5" />
                     <FormControl>
                       <Input
                         {...field}
@@ -104,7 +101,7 @@ function Login() {
         </Form>
 
         <div className="text-center">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm ">
             Don't have an account?{" "}
             <button
               onClick={() => navigate("/signup")}

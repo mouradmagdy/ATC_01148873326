@@ -5,7 +5,7 @@ const AppLayout = () => {
   return (
     <div className="h-screen w-full flex flex-col transition-all duration-300">
       <Header />
-      <div className="flex  pt-16">
+      <div className="flex  pt-10">
         <main className={`transition-all  duration-300  p-6 flex-grow `}>
           <Outlet />
         </main>
