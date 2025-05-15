@@ -1,3 +1,4 @@
+import EventDetailSkeleton from "@/components/EventDetailSkeleton";
 import { Separator } from "@/components/ui/separator";
 import { useAuthContext } from "@/context/AuthContext";
 import { useGetEvent } from "@/hooks/events/getEvent";
@@ -10,7 +11,7 @@ const EventDetail = () => {
   const { authUser } = useAuthContext();
   const navigate = useNavigate();
   if (isPending) {
-    return <div>Loading...</div>;
+    return <EventDetailSkeleton />;
   }
 
   console.log(data);

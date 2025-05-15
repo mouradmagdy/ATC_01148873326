@@ -1,3 +1,4 @@
+import HomeSkeleton from "@/components/HomeSkeleton";
 import { Button } from "@/components/ui/button";
 import { useAuthContext } from "@/context/AuthContext";
 import { useGetAllEvents } from "@/hooks/events/getAllEvents";
@@ -22,7 +23,7 @@ const Home = () => {
   const navigate = useNavigate();
   console.log(authUser);
   if (isPending) {
-    return <div>Loading...</div>;
+    return <HomeSkeleton />;
   }
   console.log(data);
   const handleBooking = () => {
@@ -55,7 +56,6 @@ const Home = () => {
                 <div className="flex items-center justify-between">
                   <p className="text-gray-600 flex items-center gap-2 text-sm">
                     <CalendarDays className="h-4 w-4  text-purple-600" />
-                    {/* {event.date}{" "} */}
                     Date:{" "}
                     {new Date(event.date).toLocaleString("en-US", {
                       year: "numeric",
