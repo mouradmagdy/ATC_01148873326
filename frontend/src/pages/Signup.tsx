@@ -1,0 +1,189 @@
+import { Lock, Mail, User } from "lucide-react";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router-dom";
+// import { signup } from "../apis/auth-api";
+import { useAuthContext } from "../context/AuthContext";
+
+const formSchema = z.object({
+  fullName: z.string().min(2, "Full name must be at least 2 characters."),
+  username: z.string().min(2, "Username must be at least 2 characters."),
+  confirmPassword: z.string().min(8, "Password must be at least 8 characters."),
+  password: z.string().min(8, "Password must be at least 8 characters."),
+  //male or female
+  gender: z.enum(["male", "female"]),
+});
+
+function Signup() {
+  const navigate = useNavigate();
+  const { setAuthUser } = useAuthContext();
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      fullName: "",
+      username: "",
+      password: "",
+      confirmPassword: "",
+      gender: "male",
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (values.password !== values.confirmPassword) {
+      form.setError("confirmPassword", {
+        type: "manual",
+        message: "Passwords do not match",
+      });
+      return;
+    }
+    const response = await signup(
+      values.fullName,
+      values.username,
+      values.password,
+      values.confirmPassword,
+      values.gender
+    );
+    if (!response.token) return;
+    navigate("/");
+    setAuthUser(response.token);
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-white rounded-xl border shadow-xl p-8 space-y-6">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-gray-900">
+            Create an Account
+          </h1>
+          <p className="mt-2 text-gray-600">
+            Join us today! Enter your details to sign up.
+          </p>
+        </div>
+
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {/* Name Field */}
+            <FormField
+              control={form.control}
+              name="fullName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="text"
+                        className="pl-10"
+                        placeholder="Enter your full name"
+                      />
+                    </FormControl>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Email Field */}
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Username</FormLabel>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="text"
+                        className="pl-10"
+                        placeholder="Enter your username"
+                      />
+                    </FormControl>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Password Field */}
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="password"
+                        className="pl-10"
+                        placeholder="Enter your password"
+                      />
+                    </FormControl>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="password"
+                        className="pl-10"
+                        placeholder="confirm your password"
+                      />
+                    </FormControl>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button type="submit" className="w-full">
+              Sign Up
+            </Button>
+          </form>
+        </Form>
+
+        <div className="text-center">
+          <p className="text-sm text-gray-600">
+            Already have an account?{" "}
+            <button
+              onClick={() => navigate("/login")}
+              className="text-indigo-600 hover:text-indigo-800 font-medium"
+            >
+              Sign in
+            </button>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Signup;

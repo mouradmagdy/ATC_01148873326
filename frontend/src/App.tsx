@@ -1,7 +1,40 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
+import { ThemeProvider } from "./components/themeProvider";
+import Congratulations from "./pages/Congratulations";
+import AdminPanel from "./pages/AdminPanel";
+import EventDetail from "./pages/EventDetail";
+import Header from "./components/Header";
+import Home from "./pages/Home";
+import AppLayout from "./components/AppLayout";
+import Login from "./pages/Login";
+import Signup from "./pages/signup";
 
 function App() {
-  return <div className="bg-red-900">Mourad</div>;
+  return (
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <BrowserRouter>
+        <Header />
+        <Routes>
+          <Route element={<AppLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/events/:id" element={<EventDetail />} />
+            <Route
+              path="/admin"
+              element={
+                // <PrivateRoute>
+                <AdminPanel />
+                // </PrivateRoute>
+              }
+            />
+            <Route path="/congratulations" element={<Congratulations />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
+  );
 }
 
 export default App;
