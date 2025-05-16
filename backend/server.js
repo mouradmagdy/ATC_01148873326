@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const connectToMongoDB = require("./db/connectToMongoDB");
 const authRoutes = require("./routes/auth-routes");
 const eventRoutes = require("./routes/event-routes");
+const bookingRoutes = require("./routes/booking-routes");
 
 dotenv.config();
 
@@ -19,10 +20,12 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.json()); // to parse JSON bodies
-app.use(cookieParser()); // to parse cookies
+app.use(express.json());
+app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
+app.use("/api/bookings", bookingRoutes);
+
 const PORT = 5000;
 const server = http.createServer(app);
 server.listen(PORT, () => {
