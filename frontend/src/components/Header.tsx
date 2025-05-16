@@ -19,7 +19,6 @@ const Header = () => {
     setAuthUser(null);
     navigate("/home");
   };
-  console.log(authUser);
 
   const nameInitials = authUser?.fullName
     ?.split(" ")

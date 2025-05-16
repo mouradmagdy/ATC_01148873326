@@ -18,6 +18,10 @@ const DetailsCell = ({ eventId }) => {
     deleteEventMutation(id);
   };
 
+  function handleView() {
+    navigate(`/events/${eventId}`);
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="cursor-pointer text-2xl bg-inherit shadow-none  border-none">
@@ -26,7 +30,10 @@ const DetailsCell = ({ eventId }) => {
       <DropdownMenuContent className=" w-40  border-muted border rounded shadow-lg z-50 fixed -right-4">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer flex items-center">
+        <DropdownMenuItem
+          onClick={handleView}
+          className="cursor-pointer flex items-center"
+        >
           <Eye /> View Details
         </DropdownMenuItem>
         <DropdownMenuItem className="cursor-pointer flex items-center">

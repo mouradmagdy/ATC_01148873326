@@ -12,10 +12,8 @@ function AdminPanel() {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
-  // const { data, isPending } = usePatients({ pageNumber, pageSize })
-  const { data, isPending } = useGetAllEvents();
+  const { data, isPending } = useGetAllEvents(pageNumber, pageSize);
   const debouncedSearchValue = useDeboundedValue(searchValue, 300);
-  console.log(data);
 
   const processData = useCallback(
     (data) => {
@@ -64,9 +62,10 @@ function AdminPanel() {
       </div>
     );
   }
-  // handlers for pagination
+  const totalPages = data?.totalEvents;
+  const totalPagesCount = Math.ceil(totalPages / pageSize);
   const handleNextPage = () => {
-    if (pageNumber < (data?.totalPages || 1)) {
+    if (pageNumber < (totalPagesCount || 1)) {
       setPageNumber((prev) => prev + 1);
     }
   };
@@ -105,7 +104,7 @@ function AdminPanel() {
         loading={isPending}
         onNextPage={handleNextPage}
         onPreviousPage={handlePreviousPage}
-        totalPages={data?.totalPages || 1}
+        totalPages={totalPagesCount}
         currentPage={pageNumber}
         resetPageNumber={resetPageNumber}
         pageSize={pageSize}

@@ -2,15 +2,7 @@ const Event = require("../models/event-model");
 const createEvent = async (req, res) => {
   try {
     const { name, description, category, venue, price, image, date } = req.body;
-    if (
-      !name ||
-      !description ||
-      !category ||
-      !venue ||
-      !price ||
-      !image ||
-      !date
-    ) {
+    if (!name || !description || !category || !venue || !price || !date) {
       return res.status(400).json({ message: "All fields are required" });
     }
     const event = new Event({
@@ -32,19 +24,21 @@ const createEvent = async (req, res) => {
 };
 const getAllEvents = async (req, res) => {
   try {
-    const { category, page = 1, limit = 10 } = req.query;
+    const { category, pageNumber = 1, pageSize = 10 } = req.query;
+
     const query = {};
     if (category) query.category = category;
     const events = await Event.find(query)
-      .skip((page - 1) * limit)
-      .limit(limit)
+      .skip((pageNumber - 1) * pageSize)
+      .limit(pageSize)
       .select("-__v");
+
     const totalEvents = await Event.countDocuments(query);
     res.status(200).json({
       events,
       totalEvents,
-      page: Number(page),
-      limit: Number(limit),
+      page: Number(pageNumber),
+      limit: Number(pageSize),
     });
   } catch (error) {
     console.log("Error in getAllEvents controller", error.message);

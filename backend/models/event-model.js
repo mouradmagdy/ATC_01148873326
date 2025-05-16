@@ -34,13 +34,13 @@ const eventSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      required: true,
-      validate: {
-        validator: function (v) {
-          return v.match(/\.(jpeg|jpg|gif|png|webp|bmp)$/) != null;
-        },
-        message: (props) => `${props.value} is not a valid image URL!`,
-      },
+      // required: true,
+      // validate: {
+      //   validator: function (v) {
+      //     return v.match(/\.(jpeg|jpg|gif|png|webp|bmp)$/) != null;
+      //   },
+      //   message: (props) => `${props.value} is not a valid image URL!`,
+      // },
     },
     date: {
       type: Date,

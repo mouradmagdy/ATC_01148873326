@@ -1,12 +1,16 @@
 import axios from "axios";
 import toast from "react-hot-toast";
-export const getAllEventsAPI = async (filters = {}) => {
+
+export const getAllEventsAPI = async (pageNumber, pageSize) => {
   try {
     const response = await axios.get(
       "http://localhost:5000/api/events/getAllEvents",
       {
-        // params: filters,
         withCredentials: true,
+        params: {
+          pageNumber,
+          pageSize,
+        },
       }
     );
     return response.data;
