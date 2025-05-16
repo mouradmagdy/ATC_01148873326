@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import { ThemeProvider } from "./components/themeProvider";
+import { ThemeProvider } from "./components/ThemeProvider";
 import Congratulations from "./pages/Congratulations";
 import AdminPanel from "./pages/AdminPanel";
 import EventDetail from "./pages/EventDetail";
