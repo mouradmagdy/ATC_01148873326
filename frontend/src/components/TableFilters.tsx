@@ -8,7 +8,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Form } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
 
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
@@ -30,9 +36,14 @@ import toast from "react-hot-toast";
 
 import {
   DatePickerField,
+  SelectField,
   TextInputField,
 } from "./admin-portal/AddEventFormFields";
-import { EventFormSchema } from "./admin-portal/EventFormSchema";
+import {
+  EventFormSchema,
+  type EventFormData,
+} from "./admin-portal/EventFormSchema";
+import { useAddEvents } from "@/hooks/events/useAddEvents";
 
 const TableFilters = ({
   addContent,
@@ -44,8 +55,7 @@ const TableFilters = ({
   addContent: string;
 }) => {
   const [openModal, setOpenModal] = useState(false);
-  // const { mutate: addPatient, isPending: isSubmitting } = useAddPatient();
-
+  const { isPending: isSubmitting, mutate: addEvent } = useAddEvents();
   const form = useForm<EventFormData>({
     resolver: zodResolver(EventFormSchema),
     defaultValues: {
@@ -53,7 +63,7 @@ const TableFilters = ({
       venue: "",
       description: "",
       category: "",
-      date: "",
+      date: null,
       price: 0,
       image: "",
       tags: [],
@@ -69,19 +79,27 @@ const TableFilters = ({
       date: format(new Date(values.date), "yyyy-MM-dd"),
       price: values.price,
       image: values.image,
-      tags: values.tags,
     };
-    // addPatient(patientData, {
-    //   onSuccess: () => {
-    //     toast.success("Patient added successfully!");
-    //     setOpenModal(false);
-    //     form.reset();
-    //   },
-    //   onError: (error) => {
-    //     console.error("Error adding patient:", error);
-    //   },
-    // });
+    console.log("Event data:", eventData);
+    addEvent(eventData, {
+      onSuccess: () => {
+        toast.success("Event added successfully!");
+        setOpenModal(false);
+        form.reset();
+      },
+      onError: (error) => {
+        console.error("Error adding patient:", error);
+      },
+    });
   }
+  const categoryOptions = [
+    { value: "music", label: "Music" },
+    { value: "sports", label: "Sports" },
+    { value: "art", label: "Art" },
+    { value: "theater", label: "Theater" },
+    { value: "comedy", label: "Comedy" },
+    { value: "food", label: "Food" },
+  ];
 
   return (
     <>
@@ -124,13 +142,11 @@ const TableFilters = ({
             </SelectGroup>
           </SelectContent>
         </Select>
-        {/*Search Input*/}
         <Input
           placeholder="Search by name or by email address"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
         />
-        {/*Add Patient Button*/}
         <Button
           onClick={() => setOpenModal(!openModal)}
           className="bg-primary text-primary-foreground hover:bg-muted hover:text-muted-foreground"
@@ -140,7 +156,6 @@ const TableFilters = ({
         </Button>
       </div>
 
-      {/*Add Patient Modal*/}
       <Dialog open={openModal} onOpenChange={(value) => setOpenModal(value)}>
         <DialogContent>
           <DialogHeader>
@@ -156,21 +171,65 @@ const TableFilters = ({
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-8 text-muted-foreground"
             >
-              {/* Name Field */}
+              <div className="flex items-center justify-between">
+                <TextInputField
+                  control={form.control}
+                  name="name"
+                  label="Name"
+                  placeholder="Enter event name"
+                />
+                <TextInputField
+                  control={form.control}
+                  name="venue"
+                  label="Venue"
+                  placeholder="Enter venue"
+                />
+              </div>
               <TextInputField
                 control={form.control}
-                name="name"
-                label="Name"
-                placeholder="John Doe"
+                name="description"
+                label="Description"
+                placeholder="Enter description"
               />
-
+              {/* <TextInputField
+                control={form.control}
+                name="price"
+                label="Price"
+                placeholder="Enter price"
+              
+              /> */}
+              <FormField
+                control={form.control}
+                // name={price}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Price</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="rounded"
+                        placeholder={"Enter price"}
+                        type="number"
+                        {...field}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <SelectField
+                control={form.control}
+                name="category"
+                label="Category"
+                placeholder="Select Category"
+                options={categoryOptions}
+              />
               <div className="flex items-center gap-5">
-                {/* Date of Birth Field */}
                 <div className="mt-2">
                   <DatePickerField
                     control={form.control}
-                    name="dob"
-                    label="Date of Birth"
+                    name="date"
+                    label="Date"
                   />
                 </div>
               </div>
@@ -182,16 +241,16 @@ const TableFilters = ({
                     setOpenModal(false);
                     form.reset();
                   }}
-                  // disabled={isSubmitting}
+                  disabled={isSubmitting}
                 >
                   Cancel
                 </Button>
                 <Button
-                  // disabled={isSubmitting}
+                  disabled={isSubmitting}
                   className="rounded hover:bg-blue-800"
                   type="submit"
                 >
-                  {/* {isSubmitting ? "Submitting..." : "Submit"} */}
+                  {isSubmitting ? "Submitting..." : "Submit"}
                 </Button>
               </div>
             </form>

@@ -32,7 +32,7 @@ const Pagination = ({
           <SelectTrigger className="rounded">
             <SelectValue placeholder="10 per page" />
           </SelectTrigger>
-          <SelectContent className="bg-sidebar-background text-sidebar-foreground border-sidebar-background ">
+          <SelectContent className=" ">
             <SelectItem className="rounded" value="10">
               10 per page
             </SelectItem>

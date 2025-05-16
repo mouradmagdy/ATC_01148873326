@@ -1,7 +1,7 @@
 import HomeSkeleton from "@/components/HomeSkeleton";
 import { Button } from "@/components/ui/button";
 import { useAuthContext } from "@/context/AuthContext";
-import { useGetAllEvents } from "@/hooks/events/getAllEvents";
+import { useGetAllEvents } from "@/hooks/events/useGetAllEvents";
 import { CalendarDays, DollarSign, MapPin } from "lucide-react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";

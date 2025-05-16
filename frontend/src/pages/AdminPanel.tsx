@@ -3,7 +3,7 @@ import useDeboundedValue from "@/hooks/useDebounce";
 import TableFilters from "@/components/TableFilters";
 import { DataTable } from "@/components/DataTable";
 import { columns } from "@/components/admin-portal/EventTableColumns";
-import { useGetAllEvents } from "@/hooks/events/getAllEvents";
+import { useGetAllEvents } from "@/hooks/events/useGetAllEvents";
 
 function AdminPanel() {
   const [searchValue, setSearchValue] = useState("");

@@ -1,7 +1,7 @@
 import EventDetailSkeleton from "@/components/EventDetailSkeleton";
 import { Separator } from "@/components/ui/separator";
 import { useAuthContext } from "@/context/AuthContext";
-import { useGetEvent } from "@/hooks/events/getEvent";
+import { useGetEvent } from "@/hooks/events/useGetEvent";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 

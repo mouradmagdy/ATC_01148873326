@@ -82,7 +82,7 @@ export const SelectField = ({
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
             </FormControl>
-            <SelectContent className="bg-sidebar-background text-sidebar-foreground border-sidebar-background">
+            <SelectContent className="">
               {options.map((option) => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
@@ -120,7 +120,7 @@ export const DatePickerField = ({
                 variant="outline"
                 className={cn(
                   "w-[240px] pl-3 text-left font-normal rounded",
-                  !field.value && "text-muted-foreground bg-sidebar-background"
+                  !field.value && ""
                 )}
               >
                 {field.value ? (
@@ -132,10 +132,7 @@ export const DatePickerField = ({
               </Button>
             </FormControl>
           </PopoverTrigger>
-          <PopoverContent
-            className="w-auto p-0 z-50 bg-sidebar-background"
-            align="start"
-          >
+          <PopoverContent className="w-auto p-0 z-50" align="start">
             <Calendar
               mode="single"
               selected={field.value as Date}

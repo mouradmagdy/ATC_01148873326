@@ -84,7 +84,7 @@ export function DataTable<TData, TValue>({
     <>
       <div className="rounded-xl shadow">
         <Table className="w-full text-sm text-left">
-          <TableHeader className="bg-sidebar-background text-muted-foreground rounded-xl border-b ">
+          <TableHeader className=" rounded-xl border-b ">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
@@ -107,17 +107,14 @@ export function DataTable<TData, TValue>({
                 <TableRow key={index} className="border-b border-b-muted">
                   {columns?.map((_, colIndex) => (
                     <TableCell key={colIndex}>
-                      <Skeleton className="w-full bg-background rounded-full h-8" />
+                      <Skeleton className="w-full rounded-full h-8" />
                     </TableCell>
                   ))}
                 </TableRow>
               ))}
             {!loading && table.getRowModel()?.rows?.length > 0
               ? table.getRowModel()?.rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    className="border-b border-b-muted hover:bg-card-background"
-                  >
+                  <TableRow key={row.id} className="">
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id} className="px-6 py-4">
                         {flexRender(

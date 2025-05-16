@@ -34,3 +34,42 @@ export const getEventById = async (id: string) => {
     throw error;
   }
 };
+
+export const createEventAPI = async (eventData) => {
+  try {
+    console.log("Event data:", eventData);
+    const response = await axios.post(
+      "http://localhost:5000/api/events/create",
+      eventData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message || "Failed to create event";
+    toast.error(errorMessage);
+    throw error;
+  }
+};
+
+export const deleteEventAPI = async (id: string) => {
+  try {
+    const response = await axios.delete(
+      `http://localhost:5000/api/events/deleteEvent/${id}`,
+      {
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message || "Failed to delete event";
+    toast.error(errorMessage);
+    throw error;
+  }
+};

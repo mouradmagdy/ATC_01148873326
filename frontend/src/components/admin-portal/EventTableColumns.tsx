@@ -9,9 +9,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Eye, File, Trash } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useDeleteEvents } from "@/hooks/events/useDeleteEvents";
 
-const DetailsCell = () => {
+const DetailsCell = ({ eventId }) => {
   const navigate = useNavigate();
+  const { deleteEventMutation } = useDeleteEvents();
+  const handleDelete = (id: string) => {
+    deleteEventMutation(id);
+  };
 
   return (
     <DropdownMenu>
@@ -27,7 +32,10 @@ const DetailsCell = () => {
         <DropdownMenuItem className="cursor-pointer flex items-center">
           <File /> Update Event
         </DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer flex items-center">
+        <DropdownMenuItem
+          onClick={() => handleDelete(eventId)}
+          className="cursor-pointer flex items-center"
+        >
           <Trash /> Delete Event
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -123,6 +131,6 @@ export const columns = [
   {
     accessorKey: "details",
     header: "",
-    cell: ({ row }) => <DetailsCell />,
+    cell: ({ row }) => <DetailsCell eventId={row.original._id} />,
   },
 ];
