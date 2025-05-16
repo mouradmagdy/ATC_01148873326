@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 export const getAllEventsAPI = async (pageNumber, pageSize) => {
   try {
     const response = await axios.get(
-      "http://localhost:5000/api/events/getAllEvents",
+      "${import.meta.env.VITE_API_URL}/api/events/getAllEvents",
       {
         withCredentials: true,
         params: {
@@ -25,7 +25,7 @@ export const getAllEventsAPI = async (pageNumber, pageSize) => {
 export const getEventById = async (id: string) => {
   try {
     const response = await axios.get(
-      `http://localhost:5000/api/events/getEventById/${id}`,
+      `${import.meta.env.VITE_API_URL}/api/events/getEventById/${id}`,
       {
         withCredentials: true,
       }
@@ -43,7 +43,7 @@ export const createEventAPI = async (eventData) => {
   try {
     console.log("Event data:", eventData);
     const response = await axios.post(
-      "http://localhost:5000/api/events/create",
+      `${import.meta.env.VITE_API_URL}/api/events/create`,
       eventData,
       {
         headers: {
@@ -64,7 +64,7 @@ export const createEventAPI = async (eventData) => {
 export const deleteEventAPI = async (id: string) => {
   try {
     const response = await axios.delete(
-      `http://localhost:5000/api/events/deleteEvent/${id}`,
+      `${import.meta.env.VITE_API_URL}/api/events/deleteEvent/${id}`,
       {
         withCredentials: true,
       }

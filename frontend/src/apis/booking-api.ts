@@ -6,7 +6,7 @@ export async function createBookingAPI(bookingData: {
 }) {
   try {
     const response = await axios.post(
-      `http://localhost:5000/api/bookings/book`,
+      `${import.meta.env.VITE_API_URL}/api/bookings/book`,
       bookingData,
       { withCredentials: true }
     );
@@ -25,7 +25,7 @@ export async function createBookingAPI(bookingData: {
 export async function getUserBookingsAPI(userId: string) {
   try {
     const response = await axios.get(
-      `http://localhost:5000/api/bookings/user/${userId}`,
+      `${import.meta.env.VITE_API_URL}/api/bookings/user/${userId}`,
       { withCredentials: true }
     );
     return response.data;
