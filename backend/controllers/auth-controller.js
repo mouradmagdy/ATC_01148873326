@@ -85,10 +85,15 @@ const login = async (req, res) => {
 
 const logout = (req, res) => {
   try {
-    res.cookie("jwt", "", {
+    const token = req.cookies.jwt;
+    // if (token) {
+    //   console.log("token", token);
+    // }
+    res.clearCookie("jwt", {
       httpOnly: true,
       sameSite: "strict",
-      maxAge: 0,
+      path: "/",
+      // secure: process.env.NODE_ENV === "production",
     });
     res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
@@ -117,6 +122,12 @@ const getCurrentUser = async (req, res) => {
       gender: user.gender,
     });
   } catch (error) {
+    res.clearCookie("jwt", {
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+    });
     console.log("Error in getCurrentUser controller", error.message);
     res.status(500).json({ error: "Internal server error" });
   }

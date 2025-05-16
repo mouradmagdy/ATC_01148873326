@@ -11,8 +11,8 @@ const {
 
 const router = express.Router();
 router.post("/create", auth, checkEventAuthorization, createEvent);
-router.get("/getAllEvents", auth, getAllEvents);
-router.get("/getEventById/:id", auth, getEventById);
+router.get("/getAllEvents", getAllEvents);
+router.get("/getEventById/:id", getEventById);
 router.delete("/deleteEvent/:id", auth, checkEventAuthorization, deleteEvent);
 router.put("/updateEvent/:id", auth, checkEventAuthorization, updateEvent);
 module.exports = router;

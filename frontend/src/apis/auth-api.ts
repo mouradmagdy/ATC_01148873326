@@ -24,9 +24,14 @@ export const loginAPI = async (username: string, password: string) => {
 };
 export const logoutAPI = async () => {
   try {
-    const response = await axios.post(`http://localhost:5000/api/auth/logout`, {
-      withCredentials: true,
-    });
+    const response = await axios.post(
+      `http://localhost:5000/api/auth/logout`,
+      {}, // this caused a problem of not sending the cookie to the server
+      // so we need to send an empty object as the body
+      {
+        withCredentials: true,
+      }
+    );
     toast.success("Logged out successfully");
     return response.data;
   } catch (error) {

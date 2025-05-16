@@ -8,7 +8,7 @@ const auth = require("../middleware/protect-route");
 
 const router = express.Router();
 router.post("/book", auth, createBooking);
-router.get("/getBookingsByUser/:userId", auth, getBookingsByUser);
+router.get("/user/:userId", auth, getBookingsByUser);
 router.delete("/deleteBooking/:id", auth, deleteBooking);
 
 module.exports = router;

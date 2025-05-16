@@ -12,6 +12,8 @@ dotenv.config();
 
 const app = express();
 const allowdOrigins = ["http://localhost:5173"];
+app.use(express.json());
+app.use(cookieParser());
 
 app.use(
   cors({
@@ -20,8 +22,6 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.json());
-app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/bookings", bookingRoutes);

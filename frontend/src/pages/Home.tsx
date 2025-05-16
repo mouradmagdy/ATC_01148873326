@@ -3,6 +3,7 @@ import HomeSkeleton from "@/components/HomeSkeleton";
 import { Button } from "@/components/ui/button";
 import { useAuthContext } from "@/context/AuthContext";
 import { useCreateBooking } from "@/hooks/bookings/useCreateBooking";
+import { useGetUserBookings } from "@/hooks/bookings/useGetUserBookings";
 import { useGetAllEvents } from "@/hooks/events/useGetAllEvents";
 import { CalendarDays, DollarSign, MapPin } from "lucide-react";
 import toast from "react-hot-toast";
@@ -25,6 +26,9 @@ const Home = () => {
   const { isPending: loadingBooking, mutate: createBooking } =
     useCreateBooking();
   const navigate = useNavigate();
+  const { isPending: loadingUserBookings, data: userBookings } =
+    useGetUserBookings(authUser?._id ?? "");
+
   if (isPending) {
     return <HomeSkeleton />;
   }
@@ -54,6 +58,30 @@ const Home = () => {
       },
     });
   };
+  const isEventBooked = (eventId: string) => {
+    if (!userBookings || !userBookings.bookings) {
+      return false;
+    }
+    return userBookings.bookings.some(
+      (booking) => booking.event._id === eventId
+    );
+  };
+  const isEventPast = (eventDate: string) => {
+    const currentDate = new Date();
+    const eventDateObj = new Date(eventDate);
+    return eventDateObj < currentDate;
+  };
+
+  // for each event, count the number of bookings of user to display it next to the button in the card event
+  const eventBookingsCount = (eventId: string) => {
+    if (!userBookings || !userBookings.bookings) {
+      return 0;
+    }
+    return userBookings.bookings.filter(
+      (booking) => booking.event._id === eventId
+    ).length;
+  };
+
   return (
     <div className="mx-auto ">
       <h1 className="text-3xl font-medium text-left">Upcoming Events</h1>
@@ -61,7 +89,9 @@ const Home = () => {
         {data.events.map((event: Event, index: number) => (
           <div
             key={index}
-            className="group rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col  border  m-2"
+            className={`group rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col  border  m-2 ${
+              isEventPast(event.date) && "opacity-50"
+            }`}
           >
             <div className="relative h-52 overflow-hidden">
               <img
@@ -113,6 +143,13 @@ const Home = () => {
                 >
                   View Details
                 </Link>
+                <div className="text-gray-600 text-sm">
+                  {isEventBooked(event._id) && (
+                    <span className="text-gray-500">
+                      x{eventBookingsCount(event._id)} Bookings
+                    </span>
+                  )}
+                </div>
                 <Button
                   onClick={() => handleBooking(event._id)}
                   className="px-5"
@@ -121,7 +158,17 @@ const Home = () => {
                   {loadingBooking && (
                     <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   )}
-                  Book now
+                  {/* {loadingUserBookings && (
+                    <div className="flex items-center">
+                      <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span className="ml-2">loadingUserBookings</span>
+                    </div>
+                  )} */}
+                  {isEventPast(event.date)
+                    ? "Event has passed"
+                    : isEventBooked(event._id)
+                    ? "Booked"
+                    : "Book Now"}
                 </Button>
               </div>
             </div>
