@@ -5,10 +5,11 @@ import { useNavigate } from "react-router-dom";
 const PrivateRoute = ({ children }) => {
   const { authUser, isLoading } = useAuthContext();
   const navigate = useNavigate();
-  console.log(authUser);
   useEffect(() => {
-    if ((!isLoading && !authUser) || authUser.role !== "admin") {
-      navigate("/login");
+    if (!isLoading) {
+      if (!authUser || authUser.role !== "admin") {
+        navigate("/login");
+      }
     }
   });
 
