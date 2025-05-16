@@ -12,6 +12,7 @@ export interface AuthUser {
   username: string;
   profilePicture: string;
   role: string;
+  _id: string;
 }
 interface AuthContextType {
   authUser: AuthUser | null;
@@ -36,7 +37,6 @@ export const AuthContextProvider = ({ children }) => {
         const response = await axios.get("http://localhost:5000/api/auth/me", {
           withCredentials: true,
         });
-        // console.log(response.data);
         setAuthUser(response.data);
         setIsAuthenticated(true);
       } catch (error) {

@@ -7,8 +7,8 @@ const createBooking = async (req, res) => {
   try {
     const { eventId, userId } = req.body;
     if (
-      !mongoose.Types.objectId.isValid(eventId) ||
-      !mongoose.Types.objectId.isValid(userId)
+      !mongoose.Types.ObjectId.isValid(eventId) ||
+      !mongoose.Types.ObjectId.isValid(userId)
     ) {
       return res.status(400).json({ message: "Invalid event or user id" });
     }

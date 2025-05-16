@@ -1,6 +1,8 @@
+import { createBookingAPI } from "@/apis/booking-api";
 import HomeSkeleton from "@/components/HomeSkeleton";
 import { Button } from "@/components/ui/button";
 import { useAuthContext } from "@/context/AuthContext";
+import { useCreateBooking } from "@/hooks/bookings/useCreateBooking";
 import { useGetAllEvents } from "@/hooks/events/useGetAllEvents";
 import { CalendarDays, DollarSign, MapPin } from "lucide-react";
 import toast from "react-hot-toast";
@@ -20,17 +22,37 @@ interface Event {
 const Home = () => {
   const { isPending, data } = useGetAllEvents();
   const { authUser } = useAuthContext();
+  const { isPending: loadingBooking, mutate: createBooking } =
+    useCreateBooking();
   const navigate = useNavigate();
-  // console.log(authUser);
   if (isPending) {
     return <HomeSkeleton />;
   }
-  // console.log(data);
-  const handleBooking = () => {
+  const handleBooking = async (eventId: string) => {
     if (!authUser) {
       toast("Please login to book an event");
       navigate("/login");
+      return;
     }
+
+    const bookingData = {
+      eventId: eventId,
+      userId: authUser._id,
+    };
+    const bookingToast = toast.loading("Processing your booking...");
+    createBooking(bookingData, {
+      onSuccess: () => {
+        toast.success("Booking successful!", {
+          id: bookingToast,
+        });
+        navigate("/Congratulations");
+      },
+      onError: (error) => {
+        toast.error("Booking failed. Please try again.", {
+          id: bookingToast,
+        });
+      },
+    });
   };
   return (
     <div className="mx-auto ">
@@ -91,7 +113,14 @@ const Home = () => {
                 >
                   View Details
                 </Link>
-                <Button onClick={handleBooking} className="px-5">
+                <Button
+                  onClick={() => handleBooking(event._id)}
+                  className="px-5"
+                  disabled={loadingBooking}
+                >
+                  {loadingBooking && (
+                    <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  )}
                   Book now
                 </Button>
               </div>
