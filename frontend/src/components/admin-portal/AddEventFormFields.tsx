@@ -71,8 +71,8 @@ export const SelectField = ({
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem>
-          <FormLabel>{label}</FormLabel>
+        <FormItem className="flex flex-col gap-1">
+          <FormLabel className="text-start">{label}</FormLabel>
           <Select
             onValueChange={field.onChange}
             defaultValue={field.value as string}

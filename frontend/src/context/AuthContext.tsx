@@ -1,4 +1,11 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import axios from "axios";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 
 export interface AuthUser {
   fullName: string;
@@ -9,18 +16,44 @@ export interface AuthUser {
 interface AuthContextType {
   authUser: AuthUser | null;
   setAuthUser: React.Dispatch<React.SetStateAction<AuthUser | null>>;
+  isLoading: boolean;
+  isAuthenticated: boolean;
 }
 export const AuthContext = createContext<AuthContextType>({
   authUser: null,
   setAuthUser: () => {},
+  isAuthenticated: false,
+  isLoading: true,
 });
 
 export const AuthContextProvider = ({ children }) => {
-  const [authUser, setAuthUser] = useState<AuthUser | null>(
-    JSON.parse(localStorage.getItem("user") || null)
-  );
+  const [authUser, setAuthUser] = useState<AuthUser | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/auth/me", {
+          withCredentials: true,
+        });
+        // console.log(response.data);
+        setAuthUser(response.data);
+        setIsAuthenticated(true);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setAuthUser(null);
+        setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    checkAuth();
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ authUser, setAuthUser }}>
+    <AuthContext.Provider
+      value={{ authUser, setAuthUser, isAuthenticated, isLoading }}
+    >
       {children}
     </AuthContext.Provider>
   );

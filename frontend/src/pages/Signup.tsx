@@ -15,6 +15,8 @@ import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 // import { signup } from "../apis/auth-api";
 import { useAuthContext } from "../context/AuthContext";
+import { signupAPI } from "@/apis/auth-api";
+import { SelectField } from "@/components/admin-portal/AddEventFormFields";
 
 const formSchema = z.object({
   fullName: z.string().min(2, "Full name must be at least 2 characters."),
@@ -48,18 +50,23 @@ function Signup() {
       });
       return;
     }
-    const response = await signup(
-      values.fullName,
-      values.username,
-      values.password,
-      values.confirmPassword,
-      values.gender
-    );
-    if (!response.token) return;
-    navigate("/");
-    setAuthUser(response.token);
+    const data = {
+      fullName: values.fullName,
+      username: values.username,
+      password: values.password,
+      confirmPassword: values.confirmPassword,
+      gender: values.gender,
+    };
+    const userData = await signupAPI(data);
+    if (!userData) return;
+    setAuthUser(userData);
+    navigate("/home");
   }
 
+  const genderOptions = [
+    { value: "male", label: "Male" },
+    { value: "female", label: "Female" },
+  ];
   return (
     <div className="max-h-screen  flex items-center justify-center p-4">
       <div className="max-w-md w-full  rounded-xl border shadow-xl p-8 space-y-6">
@@ -70,7 +77,6 @@ function Signup() {
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            {/* Name Field */}
             <FormField
               control={form.control}
               name="fullName"
@@ -93,7 +99,6 @@ function Signup() {
               )}
             />
 
-            {/* Email Field */}
             <FormField
               control={form.control}
               name="username"
@@ -115,8 +120,13 @@ function Signup() {
                 </FormItem>
               )}
             />
-
-            {/* Password Field */}
+            <SelectField
+              control={form.control}
+              name="gender"
+              label="Gender"
+              placeholder="Select Gender"
+              options={genderOptions}
+            />
             <FormField
               control={form.control}
               name="password"

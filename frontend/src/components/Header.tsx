@@ -9,13 +9,14 @@ import { useNavigate } from "react-router-dom";
 import { ModeToggle } from "./ModeToggle";
 import { Globe, Lock, ShieldIcon, UserRoundPlus } from "lucide-react";
 import { useAuthContext } from "@/context/AuthContext";
+import { logoutAPI } from "@/apis/auth-api";
 
 const Header = () => {
-  const { authUser, setAuthUser } = useAuthContext();
+  const { authUser, setAuthUser, isLoading } = useAuthContext();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
+  const handleLogout = async () => {
+    await logoutAPI();
     setAuthUser(null);
     navigate("/home");
   };
@@ -48,7 +49,7 @@ const Header = () => {
         </span>
       )}
       <div className="flex items-center gap-4">
-        {!authUser ? (
+        {!isLoading && !authUser ? (
           <>
             <span
               className="cursor-pointer flex items-center gap-2"

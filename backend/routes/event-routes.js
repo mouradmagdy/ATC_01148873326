@@ -8,6 +8,7 @@ const {
   updateEvent,
   deleteEvent,
 } = require("../controllers/event-controller");
+
 const router = express.Router();
 router.post("/create", auth, checkEventAuthorization, createEvent);
 router.get("/getAllEvents", auth, getAllEvents);

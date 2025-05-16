@@ -1,11 +1,13 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/user-model");
 const generateTokenAndSetCookie = require("../utils/generate-token");
+const jwt = require("jsonwebtoken");
 
 const signup = async (req, res) => {
   try {
     const { fullName, username, password, confirmPassword, role, gender } =
       req.body;
+    console.log("req.body", req.body);
     if (password !== confirmPassword) {
       return res.status(400).json({ message: "Passwords do not match" });
     }
@@ -95,8 +97,34 @@ const logout = (req, res) => {
   }
 };
 
+const getCurrentUser = async (req, res) => {
+  try {
+    const token = req.cookies.jwt;
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.userId).select("-password -__v");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({
+      _id: user._id,
+      fullName: user.fullName,
+      username: user.username,
+      profilePicture: user.profilePicture,
+      role: user.role,
+      gender: user.gender,
+    });
+  } catch (error) {
+    console.log("Error in getCurrentUser controller", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   signup,
   login,
   logout,
+  getCurrentUser,
 };
