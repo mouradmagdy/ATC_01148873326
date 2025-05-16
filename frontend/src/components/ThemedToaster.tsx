@@ -1,5 +1,5 @@
 import { Toaster } from "react-hot-toast";
-import { useTheme } from "./themeProvider";
+import { useTheme } from "./ThemeProvider";
 
 function ThemedToaster() {
   const { theme } = useTheme();
