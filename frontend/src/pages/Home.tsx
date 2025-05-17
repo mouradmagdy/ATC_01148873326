@@ -84,7 +84,7 @@ const Home = () => {
 
   return (
     <div className="mx-auto ">
-      <h1 className="text-3xl font-medium text-left">Upcoming Events</h1>
+      <h1 className="text-3xl font-medium text-left">Events</h1>
       <div className="grid grid-cols-2 rounded-lg my-10 ">
         {data.events.map((event: Event, index: number) => (
           <div

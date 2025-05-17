@@ -80,7 +80,6 @@ const TableFilters = ({
       price: values.price,
       image: values.image,
     };
-    console.log("Event data:", eventData);
     addEvent(eventData, {
       onSuccess: () => {
         toast.success("Event added successfully!");
