@@ -153,7 +153,7 @@ const Home = () => {
                 <Button
                   onClick={() => handleBooking(event._id)}
                   className="px-5"
-                  disabled={loadingBooking}
+                  disabled={loadingBooking || isEventPast(event.date)}
                 >
                   {loadingBooking && (
                     <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
