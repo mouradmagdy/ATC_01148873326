@@ -13,7 +13,7 @@ dotenv.config();
 const app = express();
 const allowdOrigins = [
   "http://localhost:5173",
-  "https://tazkarti-mourad.vercel.app/",
+  "https://tazkarti-mourad.vercel.app",
 ];
 app.use(express.json());
 app.use(cookieParser());
