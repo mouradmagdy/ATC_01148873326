@@ -66,7 +66,6 @@ const TableFilters = ({
       date: null,
       price: 0,
       image: "",
-      tags: [],
     },
   });
   // 2. Define a submit handler.
@@ -87,7 +86,7 @@ const TableFilters = ({
         form.reset();
       },
       onError: (error) => {
-        console.error("Error adding patient:", error);
+        console.error("Error adding event:", error);
       },
     });
   }
@@ -95,9 +94,8 @@ const TableFilters = ({
     { value: "music", label: "Music" },
     { value: "sports", label: "Sports" },
     { value: "art", label: "Art" },
-    { value: "theater", label: "Theater" },
-    { value: "comedy", label: "Comedy" },
-    { value: "food", label: "Food" },
+    { value: "technology", label: "Technology" },
+    { value: "other", label: "Other" },
   ];
 
   return (

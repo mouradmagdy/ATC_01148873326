@@ -17,7 +17,6 @@ const EventDetail = () => {
     return <EventDetailSkeleton />;
   }
 
-  console.log(data);
   const { name, date, venue, price, category, description } = data;
 
   const handleBooking = () => {

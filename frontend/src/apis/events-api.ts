@@ -60,6 +60,23 @@ export const createEventAPI = async (eventData) => {
     throw error;
   }
 };
+export const updateEventAPI = async (id: string, eventData) => {
+  try {
+    const response = await axios.put(
+      `${import.meta.env.VITE_API_URL}/api/events/updateEvent/${id}`,
+      eventData,
+      {
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message || "Failed to update event";
+    toast.error(errorMessage);
+    throw error;
+  }
+};
 
 export const deleteEventAPI = async (id: string) => {
   try {
