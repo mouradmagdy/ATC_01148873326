@@ -86,14 +86,15 @@ const login = async (req, res) => {
 const logout = (req, res) => {
   try {
     const token = req.cookies.jwt;
-    // if (token) {
-    //   console.log("token", token);
-    // }
+    if (token) {
+      console.log("token", token);
+    }
     res.clearCookie("jwt", {
       httpOnly: true,
-      sameSite: "strict",
+      sameSite: "Npne",
       path: "/",
       // secure: process.env.NODE_ENV === "production",
+      secure: true,
     });
     res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
@@ -124,9 +125,10 @@ const getCurrentUser = async (req, res) => {
   } catch (error) {
     res.clearCookie("jwt", {
       httpOnly: true,
-      sameSite: "strict",
+      sameSite: "None",
       secure: process.env.NODE_ENV === "production",
       path: "/",
+      secure: true,
     });
     console.log("Error in getCurrentUser controller", error.message);
     res.status(500).json({ error: "Internal server error" });
