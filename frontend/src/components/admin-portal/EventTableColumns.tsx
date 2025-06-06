@@ -228,6 +228,7 @@ export const columns = [
           <img
             src={row.original.image}
             alt={row.original.name}
+            loading="lazy"
             className="h-full w-full rounded-full"
           />
         </div>

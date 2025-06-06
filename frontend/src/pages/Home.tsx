@@ -62,8 +62,9 @@ const Home = () => {
     if (!userBookings || !userBookings.bookings) {
       return false;
     }
+
     return userBookings.bookings.some(
-      (booking) => booking.event._id === eventId
+      (booking) => booking.event?._id === eventId
     );
   };
   const isEventPast = (eventDate: string) => {
@@ -77,8 +78,9 @@ const Home = () => {
     if (!userBookings || !userBookings.bookings) {
       return 0;
     }
+    // console.log("userBookings", userBookings.bookings[0]?.event._id);
     return userBookings.bookings.filter(
-      (booking) => booking.event._id === eventId
+      (booking) => booking?.event?._id === eventId
     ).length;
   };
 
