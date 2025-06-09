@@ -10,7 +10,13 @@ const {
 } = require("../controllers/event-controller");
 
 const router = express.Router();
-router.post("/create", auth, checkEventAuthorization, createEvent);
+router.post(
+  "/create",
+  auth,
+  checkEventAuthorization,
+  upload.single("image"),
+  createEvent
+);
 router.get("/getAllEvents", getAllEvents);
 router.get("/getEventById/:id", getEventById);
 router.delete("/deleteEvent/:id", auth, checkEventAuthorization, deleteEvent);

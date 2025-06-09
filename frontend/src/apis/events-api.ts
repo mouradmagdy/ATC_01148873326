@@ -41,13 +41,13 @@ export const getEventById = async (id: string) => {
 
 export const createEventAPI = async (eventData) => {
   try {
-    console.log("Event data:", eventData);
+    console.log([...eventData.entries()]);
     const response = await axios.post(
       `${import.meta.env.VITE_API_URL}/api/events/create`,
       eventData,
       {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
         withCredentials: true,
       }

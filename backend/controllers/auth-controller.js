@@ -2,9 +2,11 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/user-model");
 const generateTokenAndSetCookie = require("../utils/generate-token");
 const jwt = require("jsonwebtoken");
+const logger = require("../utils/logger");
 
 const signup = async (req, res) => {
   try {
+    logger.info("User signup attempt", { body: req.body, user: req.user });
     const { fullName, username, password, confirmPassword, role, gender } =
       req.body;
     console.log("req.body", req.body);
@@ -50,13 +52,15 @@ const signup = async (req, res) => {
       res.status(400).json({ error: "Invalid user data" });
     }
   } catch (error) {
-    console.error("Error during signup in controller:", error);
+    logger.error("Error during signup in controller", error.message);
+    // console.error("Error during signup in controller:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
 const login = async (req, res) => {
   try {
+    logger.info("User login attempt", { body: req.body, user: req.user });
     const { username, password } = req.body;
     const user = await User.findOne({ username });
     const isPasswordCorrect = await bcrypt.compare(
@@ -78,13 +82,15 @@ const login = async (req, res) => {
       gender: user.gender,
     });
   } catch (error) {
-    console.log("Error in login controller", error.message);
+    logger.error("Error in login controller", error.message);
+    // console.log("Error in login controller", error.message);
     res.status(500).json({ error: "Internal server error" });
   }
 };
 
 const logout = (req, res) => {
   try {
+    logger.info("User logout attempt", { user: req.user });
     const token = req.cookies.jwt;
     if (token) {
       console.log("token", token);
@@ -130,7 +136,8 @@ const getCurrentUser = async (req, res) => {
       path: "/",
       secure: true,
     });
-    console.log("Error in getCurrentUser controller", error.message);
+    logger.error("Error in getCurrentUser controller", error.message);
+    // console.log("Error in getCurrentUser controller", error.message);
     res.status(500).json({ error: "Internal server error" });
   }
 };

@@ -55,6 +55,7 @@ const TableFilters = ({
   addContent: string;
 }) => {
   const [openModal, setOpenModal] = useState(false);
+
   const { isPending: isSubmitting, mutate: addEvent } = useAddEvents();
   const form = useForm<EventFormData>({
     resolver: zodResolver(EventFormSchema),
@@ -70,16 +71,29 @@ const TableFilters = ({
   });
   // 2. Define a submit handler.
   function onSubmit(values: EventFormData) {
-    const eventData = {
-      name: values.name,
-      venue: values.venue,
-      description: values.description,
-      category: values.category,
-      date: format(new Date(values.date), "yyyy-MM-dd"),
-      price: values.price,
-      image: values.image,
-    };
-    addEvent(eventData, {
+    // const eventData = {
+    //   name: values.name,
+    //   venue: values.venue,
+    //   description: values.description,
+    //   category: values.category,
+    //   date: format(new Date(values.date), "yyyy-MM-dd"),
+    //   price: values.price,
+    //   image: values.image,
+    // };
+    const formData = new FormData();
+    formData.append("name", values.name);
+    formData.append("venue", values.venue);
+    formData.append("description", values.description);
+    formData.append("category", values.category);
+    formData.append("date", format(new Date(values.date), "yyyy-MM-dd"));
+    formData.append("price", values.price.toString());
+    if (values.image instanceof File) {
+      formData.append("image", values.image);
+    }
+
+    // console.log("Event Data:", formData);
+    console.log([...formData.entries()]);
+    addEvent(formData, {
       onSuccess: () => {
         toast.success("Event added successfully!");
         setOpenModal(false);
@@ -230,7 +244,31 @@ const TableFilters = ({
                   />
                 </div>
               </div>
-
+              {/* Add Image Upload Field */}
+              <FormField
+                control={form.control}
+                name="image"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Event Image</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="file"
+                        accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/bmp"
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          field.onChange(file); // Update form state
+                          // if (file) {
+                          //   setImagePreview(URL.createObjectURL(file)); // Set image preview
+                          // } else {
+                          //   setImagePreview(null);
+                          // }
+                        }}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
               <div className="flex justify-end gap-4">
                 <Button
                   className="rounded bg-destructive text-destructive-foreground"

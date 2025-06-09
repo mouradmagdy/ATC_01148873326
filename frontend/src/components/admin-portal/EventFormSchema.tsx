@@ -24,6 +24,6 @@ export const EventFormSchema = z.object({
     .number()
     .min(0, "Price must be a positive number.")
     .max(100000, "Price must be at most 100000."),
-  image: z.string().optional(),
+  image: z.any().optional(),
 });
 export type EventFormData = z.infer<typeof EventFormSchema>;
