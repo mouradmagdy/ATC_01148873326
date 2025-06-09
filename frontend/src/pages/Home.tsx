@@ -1,4 +1,3 @@
-import { createBookingAPI } from "@/apis/booking-api";
 import HomeSkeleton from "@/components/HomeSkeleton";
 import Pagination from "@/components/Pagination";
 import { Button } from "@/components/ui/button";
@@ -7,9 +6,10 @@ import { useCreateBooking } from "@/hooks/bookings/useCreateBooking";
 import { useGetUserBookings } from "@/hooks/bookings/useGetUserBookings";
 import { useGetAllEvents } from "@/hooks/events/useGetAllEvents";
 import { CalendarDays, DollarSign, MapPin } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async"; // Install: npm install react-helmet-async
 interface Event {
   name: string;
   date: string;
@@ -35,6 +35,17 @@ const Home = () => {
   const navigate = useNavigate();
   const { isPending: loadingUserBookings, data: userBookings } =
     useGetUserBookings(authUser?._id ?? "");
+
+  useEffect(() => {
+    const link = document.createElement("link");
+    link.rel = "preconnect";
+    link.href = "https://res.cloudinary.com";
+    document.head.appendChild(link);
+
+    return () => {
+      document.head.removeChild(link); // Cleanup on unmount
+    };
+  }, []);
 
   if (isPending) {
     return <HomeSkeleton />;
@@ -114,6 +125,16 @@ const Home = () => {
   return (
     <div className="mx-auto ">
       <h1 className="text-3xl font-medium text-left">Events</h1>
+      <Helmet>
+        {data?.events[0]?.image && (
+          <link
+            rel="preload"
+            href={data.events[0].image && data.events[1].image}
+            as="image"
+            fetchPriority="high"
+          />
+        )}
+      </Helmet>
       <div className="grid grid-cols-2 rounded-lg my-10 ">
         {data.events.map((event: Event, index: number) => (
           <div
@@ -127,6 +148,7 @@ const Home = () => {
                 src={event.image}
                 alt="Category 1"
                 className=" mb-4 w-full h-full transform group-hover:scale-105 transition-transform duration-500"
+                loading={index === 0 || index === 1 ? "eager" : "lazy"}
               />
             </div>
             <div className="p-3">
@@ -187,12 +209,7 @@ const Home = () => {
                   {loadingBooking && (
                     <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   )}
-                  {/* {loadingUserBookings && (
-                    <div className="flex items-center">
-                      <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span className="ml-2">loadingUserBookings</span>
-                    </div>
-                  )} */}
+
                   {isEventPast(event.date)
                     ? "Event has passed"
                     : isEventBooked(event._id)
