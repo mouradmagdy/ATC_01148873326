@@ -13,9 +13,7 @@ const createEvent = async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ message: "Image file is required" });
     }
-    console.log("check1");
 
-    // const imagePath = `/uploads/${(req, file.filename)}`;
     const result = await new Promise((resolve, reject) => {
       cloudinary.uploader
         .upload_stream({ folder: "events" }, (error, result) =>
@@ -23,7 +21,6 @@ const createEvent = async (req, res) => {
         )
         .end(req.file.buffer);
     });
-    console.log("check2");
     const imageUrl = result.secure_url;
     const event = new Event({
       name,
@@ -35,11 +32,8 @@ const createEvent = async (req, res) => {
       date,
       createdBy: req.user._id,
     });
-    console.log("check3");
     await event.save();
-    console.log("check4");
     logger.info("Event created successfully", { eventId: event._id });
-    console.log("check5");
 
     res.status(201).json(event);
   } catch (err) {
