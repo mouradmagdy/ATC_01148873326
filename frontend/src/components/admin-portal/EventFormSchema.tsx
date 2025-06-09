@@ -24,6 +24,13 @@ export const EventFormSchema = z.object({
     .number()
     .min(0, "Price must be a positive number.")
     .max(100000, "Price must be at most 100000."),
-  image: z.any().optional(),
+  image: z
+    .any()
+    .refine((file) => file instanceof File, {
+      message: "An image file is required.",
+    })
+    .refine((file) => file?.size > 0, {
+      message: "Please select a valid image file.",
+    }),
 });
 export type EventFormData = z.infer<typeof EventFormSchema>;

@@ -1,11 +1,13 @@
 import { createBookingAPI } from "@/apis/booking-api";
 import HomeSkeleton from "@/components/HomeSkeleton";
+import Pagination from "@/components/Pagination";
 import { Button } from "@/components/ui/button";
 import { useAuthContext } from "@/context/AuthContext";
 import { useCreateBooking } from "@/hooks/bookings/useCreateBooking";
 import { useGetUserBookings } from "@/hooks/bookings/useGetUserBookings";
 import { useGetAllEvents } from "@/hooks/events/useGetAllEvents";
 import { CalendarDays, DollarSign, MapPin } from "lucide-react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 interface Event {
@@ -18,10 +20,15 @@ interface Event {
   updatedAt: string;
   createdAt: string;
   createdBy: string;
+  image: string;
 }
 
 const Home = () => {
-  const { isPending, data } = useGetAllEvents();
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
+  const { data, isPending } = useGetAllEvents(pageNumber, pageSize);
+  // const { isPending, data } = useGetAllEvents();
   const { authUser } = useAuthContext();
   const { isPending: loadingBooking, mutate: createBooking } =
     useCreateBooking();
@@ -32,6 +39,26 @@ const Home = () => {
   if (isPending) {
     return <HomeSkeleton />;
   }
+
+  const totalPages = data?.totalEvents;
+  const totalPagesCount = Math.ceil(totalPages / pageSize);
+
+  const handleNextPage = () => {
+    if (pageNumber < (totalPagesCount || 1)) {
+      setPageNumber((prev) => prev + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (pageNumber > 1) {
+      setPageNumber((prev) => prev - 1);
+    }
+  };
+
+  const resetPageNumber = () => {
+    setPageNumber(1);
+  };
+
   const handleBooking = async (eventId: string) => {
     if (!authUser) {
       toast("Please login to book an event");
@@ -97,7 +124,7 @@ const Home = () => {
           >
             <div className="relative h-52 overflow-hidden">
               <img
-                src="/pic1.jpg"
+                src={event.image}
                 alt="Category 1"
                 className=" mb-4 w-full h-full transform group-hover:scale-105 transition-transform duration-500"
               />
@@ -177,6 +204,16 @@ const Home = () => {
           </div>
         ))}
       </div>
+      {/* {pagination && ( */}
+      <Pagination
+        onNextPage={handleNextPage}
+        onPreviousPage={handlePreviousPage}
+        totalPages={totalPagesCount}
+        currentPage={pageNumber}
+        pageSize={pageSize}
+        setPageSize={setPageSize}
+        resetPageNumber={resetPageNumber}
+      />
     </div>
   );
 };

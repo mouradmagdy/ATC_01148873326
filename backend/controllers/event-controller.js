@@ -1,9 +1,11 @@
 const Event = require("../models/event-model");
 const logger = require("../utils/logger");
+const cloudinary = require("../utils/cloudinary-setup");
 const createEvent = async (req, res) => {
   try {
     // logger.info("Creating event", { body: req.body, user: req.user });
     logger.info("Creating event", { body: req.body, file: req.file });
+    console.log("Creating event", { body: req.body, file: req.file });
     const { name, description, category, venue, price, date } = req.body;
     if (!name || !description || !category || !venue || !price || !date) {
       return res.status(400).json({ message: "All fields are required" });
@@ -11,6 +13,7 @@ const createEvent = async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ message: "Image file is required" });
     }
+    console.log("check1");
 
     // const imagePath = `/uploads/${(req, file.filename)}`;
     const result = await new Promise((resolve, reject) => {
@@ -20,6 +23,7 @@ const createEvent = async (req, res) => {
         )
         .end(req.file.buffer);
     });
+    console.log("check2");
     const imageUrl = result.secure_url;
     const event = new Event({
       name,
@@ -31,8 +35,12 @@ const createEvent = async (req, res) => {
       date,
       createdBy: req.user._id,
     });
+    console.log("check3");
     await event.save();
-    logger.log("Event created successfully", { eventId: event._id });
+    console.log("check4");
+    logger.info("Event created successfully", { eventId: event._id });
+    console.log("check5");
+
     res.status(201).json(event);
   } catch (err) {
     logger.error("Error in createEvent controller", err.message);

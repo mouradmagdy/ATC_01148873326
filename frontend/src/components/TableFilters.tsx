@@ -14,6 +14,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 
 import { Input } from "./ui/input";
@@ -66,20 +67,11 @@ const TableFilters = ({
       category: "",
       date: null,
       price: 0,
-      image: "",
+      image: undefined,
     },
   });
   // 2. Define a submit handler.
   function onSubmit(values: EventFormData) {
-    // const eventData = {
-    //   name: values.name,
-    //   venue: values.venue,
-    //   description: values.description,
-    //   category: values.category,
-    //   date: format(new Date(values.date), "yyyy-MM-dd"),
-    //   price: values.price,
-    //   image: values.image,
-    // };
     const formData = new FormData();
     formData.append("name", values.name);
     formData.append("venue", values.venue);
@@ -91,8 +83,6 @@ const TableFilters = ({
       formData.append("image", values.image);
     }
 
-    // console.log("Event Data:", formData);
-    console.log([...formData.entries()]);
     addEvent(formData, {
       onSuccess: () => {
         toast.success("Event added successfully!");
@@ -202,16 +192,9 @@ const TableFilters = ({
                 label="Description"
                 placeholder="Enter description"
               />
-              {/* <TextInputField
-                control={form.control}
-                name="price"
-                label="Price"
-                placeholder="Enter price"
-              
-              /> */}
+
               <FormField
                 control={form.control}
-                // name={price}
                 name="price"
                 render={({ field }) => (
                   <FormItem>
@@ -228,27 +211,29 @@ const TableFilters = ({
                   </FormItem>
                 )}
               />
-              <SelectField
-                control={form.control}
-                name="category"
-                label="Category"
-                placeholder="Select Category"
-                options={categoryOptions}
-              />
-              <div className="flex items-center gap-5">
-                <div className="mt-2">
-                  <DatePickerField
-                    control={form.control}
-                    name="date"
-                    label="Date"
-                  />
-                </div>
+              <div className="flex items-center justify-between">
+                <SelectField
+                  control={form.control}
+                  name="category"
+                  label="Category"
+                  placeholder="Select Category"
+                  options={categoryOptions}
+                />
+                {/* <div className="flex items-center gap-5">
+                  <div className="mt-"> */}
+                <DatePickerField
+                  control={form.control}
+                  name="date"
+                  label="Date"
+                />
+                {/* </div>
+                </div> */}
               </div>
               {/* Add Image Upload Field */}
               <FormField
                 control={form.control}
                 name="image"
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <FormItem>
                     <FormLabel>Event Image</FormLabel>
                     <FormControl>
@@ -257,15 +242,13 @@ const TableFilters = ({
                         accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/bmp"
                         onChange={(e) => {
                           const file = e.target.files[0];
-                          field.onChange(file); // Update form state
-                          // if (file) {
-                          //   setImagePreview(URL.createObjectURL(file)); // Set image preview
-                          // } else {
-                          //   setImagePreview(null);
-                          // }
+                          field.onChange(file);
                         }}
                       />
                     </FormControl>
+                    {fieldState.error && (
+                      <FormMessage>{fieldState.error.message}</FormMessage>
+                    )}
                   </FormItem>
                 )}
               />

@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/select";
 
 const Pagination = ({
-  table,
   onNextPage,
   onPreviousPage,
   totalPages,

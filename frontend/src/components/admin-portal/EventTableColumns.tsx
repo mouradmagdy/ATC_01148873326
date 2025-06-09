@@ -10,8 +10,8 @@ import {
 import { Eye, File, Trash } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useDeleteEvents } from "@/hooks/events/useDeleteEvents";
-import { Form, FormProvider, useForm } from "react-hook-form";
-import { useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EventFormSchema, type EventFormData } from "./EventFormSchema";
 import {
@@ -38,7 +38,7 @@ const DetailsCell = ({ eventId }) => {
   const { deleteEventMutation } = useDeleteEvents();
   const [openModal, setOpenModal] = useState(false);
   const { isPending: isUpdating, mutate: updateEvent } = useUpdateEvents();
-  const { data } = useGetEvent(eventId);
+  const { data, isPending } = useGetEvent(eventId);
 
   const handleDelete = (id: string) => {
     deleteEventMutation(id);
@@ -46,15 +46,28 @@ const DetailsCell = ({ eventId }) => {
   const form = useForm<EventFormData>({
     resolver: zodResolver(EventFormSchema),
     defaultValues: {
-      name: data?.name || "",
-      venue: data?.venue || "",
-      description: data?.description || "",
-      category: data?.category || "",
-      date: data?.date || null,
-      price: data?.price || 0,
-      image: data?.image || "",
+      name: "",
+      venue: "",
+      description: "",
+      category: "",
+      date: null,
+      price: 0,
+      image: "",
     },
   });
+  useEffect(() => {
+    if (data) {
+      form.reset({
+        name: data.name || "",
+        venue: data.venue || "",
+        description: data.description || "",
+        category: data.category || "",
+        date: data.date ? new Date(data.date) : null, // Convert to Date object if needed
+        price: data.price || 0,
+        image: data.image || "",
+      });
+    }
+  }, [data, form]);
   // 2. Define a submit handler.
   function onSubmit(values: EventFormData) {
     const eventData = {
@@ -121,99 +134,103 @@ const DetailsCell = ({ eventId }) => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <Dialog open={openModal} onOpenChange={setOpenModal}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="text-muted-foreground">
-              Update Event
-            </DialogTitle>
-            <DialogDescription>
-              Such as event name, date, venue, and description.
-            </DialogDescription>
-          </DialogHeader>
-          <FormProvider {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-8 text-muted-foreground"
-            >
-              <div className="flex items-center justify-between">
-                <TextInputField
-                  control={form.control}
-                  name="name"
-                  label="Name"
-                  placeholder="Enter event name"
-                  // value={data?.name}
-                />
-                <TextInputField
-                  control={form.control}
-                  name="venue"
-                  label="Venue"
-                  placeholder="Enter venue"
-                />
-              </div>
-              <TextInputField
-                control={form.control}
-                name="description"
-                label="Description"
-                placeholder="Enter description"
-              />
-              <FormField
-                control={form.control}
-                name="price"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Price</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="rounded"
-                        placeholder="Enter price"
-                        type="number"
-                        {...field}
-                        onChange={(e) => field.onChange(Number(e.target.value))}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <SelectField
-                control={form.control}
-                name="category"
-                label="Category"
-                placeholder="Select Category"
-                options={categoryOptions}
-              />
-              <div className="flex items-center gap-5">
-                <div className="mt-2">
-                  <DatePickerField
+      {!isPending && (
+        <Dialog open={openModal} onOpenChange={setOpenModal}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle className="text-muted-foreground">
+                Update Event
+              </DialogTitle>
+              <DialogDescription>
+                Such as event name, date, venue, and description.
+              </DialogDescription>
+            </DialogHeader>
+            <FormProvider {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-8 text-muted-foreground"
+              >
+                <div className="flex items-center justify-between">
+                  <TextInputField
                     control={form.control}
-                    name="date"
-                    label="Date"
+                    name="name"
+                    label="Name"
+                    placeholder="Enter event name"
+                    // value={data?.name}
+                  />
+                  <TextInputField
+                    control={form.control}
+                    name="venue"
+                    label="Venue"
+                    placeholder="Enter venue"
                   />
                 </div>
-              </div>
-              <div className="flex justify-end gap-4">
-                <Button
-                  className="rounded bg-destructive text-destructive-foreground"
-                  onClick={() => {
-                    setOpenModal(false);
-                    form.reset();
-                  }}
-                  disabled={isUpdating}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  disabled={isUpdating}
-                  className="rounded hover:bg-blue-800"
-                  type="submit"
-                >
-                  {isUpdating ? "Updating..." : "Update"}
-                </Button>
-              </div>
-            </form>
-          </FormProvider>
-        </DialogContent>
-      </Dialog>
+                <TextInputField
+                  control={form.control}
+                  name="description"
+                  label="Description"
+                  placeholder="Enter description"
+                />
+                <FormField
+                  control={form.control}
+                  name="price"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Price</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="rounded"
+                          placeholder="Enter price"
+                          type="number"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(Number(e.target.value))
+                          }
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <SelectField
+                  control={form.control}
+                  name="category"
+                  label="Category"
+                  placeholder="Select Category"
+                  options={categoryOptions}
+                />
+                <div className="flex items-center gap-5">
+                  <div className="mt-2">
+                    <DatePickerField
+                      control={form.control}
+                      name="date"
+                      label="Date"
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-end gap-4">
+                  <Button
+                    className="rounded bg-destructive text-destructive-foreground"
+                    onClick={() => {
+                      setOpenModal(false);
+                      form.reset();
+                    }}
+                    disabled={isUpdating}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    disabled={isUpdating}
+                    className="rounded hover:bg-blue-800"
+                    type="submit"
+                  >
+                    {isUpdating ? "Updating..." : "Update"}
+                  </Button>
+                </div>
+              </form>
+            </FormProvider>
+          </DialogContent>
+        </Dialog>
+      )}
     </>
   );
 };
