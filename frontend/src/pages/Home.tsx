@@ -9,7 +9,6 @@ import { CalendarDays, DollarSign, MapPin } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
-import { Helmet } from "react-helmet-async"; // Install: npm install react-helmet-async
 interface Event {
   name: string;
   date: string;
