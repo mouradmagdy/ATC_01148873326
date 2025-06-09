@@ -1,6 +1,6 @@
 
 
-# 📁 This is a readme file for the backend
+# This is a readme file for the backend
 
 This is the backend of the project, built using Node.js and Express. It handles authentication, data management, and API routing.
 ## Demo
@@ -15,7 +15,7 @@ This is the backend of the project, built using Node.js and Express. It handles 
 - mongoose
 - JWT
 
-## 📦 Installation
+## Installation
 
 ```bash
 cd backend
