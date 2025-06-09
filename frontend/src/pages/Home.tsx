@@ -43,7 +43,7 @@ const Home = () => {
     document.head.appendChild(link);
 
     return () => {
-      document.head.removeChild(link); // Cleanup on unmount
+      document.head.removeChild(link);
     };
   }, []);
 
@@ -125,16 +125,7 @@ const Home = () => {
   return (
     <div className="mx-auto ">
       <h1 className="text-3xl font-medium text-left">Events</h1>
-      <Helmet>
-        {data?.events[0]?.image && (
-          <link
-            rel="preload"
-            href={data.events[0].image && data.events[1].image}
-            as="image"
-            fetchPriority="high"
-          />
-        )}
-      </Helmet>
+
       <div className="grid grid-cols-2 rounded-lg my-10 ">
         {data.events.map((event: Event, index: number) => (
           <div
@@ -148,7 +139,7 @@ const Home = () => {
                 src={event.image}
                 alt="Category 1"
                 className=" mb-4 w-full h-full transform group-hover:scale-105 transition-transform duration-500"
-                loading={index === 0 || index === 1 ? "eager" : "lazy"}
+                loading={index === 0 ? "eager" : "lazy"}
               />
             </div>
             <div className="p-3">
