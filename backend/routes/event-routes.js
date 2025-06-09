@@ -8,8 +8,8 @@ const {
   updateEvent,
   deleteEvent,
 } = require("../controllers/event-controller");
-
 const router = express.Router();
+const upload = require("../utils/multer-setup");
 router.post(
   "/create",
   auth,
