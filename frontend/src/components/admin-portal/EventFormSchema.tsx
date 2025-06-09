@@ -9,7 +9,7 @@ export const EventFormSchema = z.object({
   description: z
     .string()
     .min(10, "address must be at least 10 characters.")
-    .max(500, "address must be at least 10 characters."),
+    .max(1000, "address must be at least 10 characters."),
 
   category: z.string().min(3, "Category must be at least 3 characters."),
   date: z.date({

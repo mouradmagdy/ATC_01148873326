@@ -17,7 +17,7 @@ const EventDetail = () => {
     return <EventDetailSkeleton />;
   }
 
-  const { name, date, venue, price, category, description } = data;
+  const { name, date, venue, price, category, description, image } = data;
 
   const handleBooking = () => {
     if (!authUser) {
@@ -48,7 +48,7 @@ const EventDetail = () => {
   return (
     <div className="">
       <div>
-        <img className="w-full h-72 object-fill rounded" src="/pic1.jpg" />
+        <img className="w-full h-72 object-fill rounded" src={image} />
       </div>
       <div className="flex flex-col gap-2 p-4">
         <h1 className="text-xl font-normal text-left">{name}</h1>
