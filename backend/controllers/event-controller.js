@@ -16,8 +16,12 @@ const createEvent = async (req, res) => {
 
     const result = await new Promise((resolve, reject) => {
       cloudinary.uploader
-        .upload_stream({ folder: "events" }, (error, result) =>
-          error ? reject(error) : resolve(result)
+        .upload_stream(
+          {
+            folder: "events",
+            transformation: [{ fetch_format: "auto", quality: "auto" }],
+          },
+          (error, result) => (error ? reject(error) : resolve(result))
         )
         .end(req.file.buffer);
     });
