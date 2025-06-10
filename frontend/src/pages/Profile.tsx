@@ -1,4 +1,5 @@
 import { getCurrentUser } from "@/apis/auth-api";
+import ProfileSkeleton from "@/components/ProfileSkeleton";
 import { useEffect, useState } from "react";
 
 const Profile = () => {
@@ -22,34 +23,39 @@ const Profile = () => {
     fetchUserData();
   }, []);
   if (loading) {
-    return <div className="text-center">Loading...</div>;
+    return <ProfileSkeleton />;
   }
   const nameInitials = user?.fullName
     .split(" ")
     .map((n) => n[0])
     .join("")
     .toUpperCase();
+  console.log("User data:", user);
   return (
     <div className="px-5 py-2">
       <h1 className="font-medium uppercase text-xl">Profile</h1>
       <div className="border mt-4 p-4 rounded">
         <div className="flex items-center justify-between">
-          <div className="h-20 w-20 rounded-full ">{nameInitials}</div>
+          <div className="h-20 w-20 rounded-full bg-blue-100 flex items-center justify-center">
+            <span className="text-base font-medium text-blue-800">
+              {nameInitials}
+            </span>
+          </div>{" "}
           <span className="text-base font-normal">
             <span className="font-medium text-primary">Name: </span>
-            {user.fullName}
+            {user?.fullName || "N/A"}
           </span>
           <span className="text-base font-normal">
             <span className="font-medium text-primary">Role: </span>
-            {user.role}
+            {user?.role || "N/A"}
           </span>
           <span className="text-base font-normal">
             <span className="font-medium text-primary">Username: </span>
-            {user.username}
+            {user?.username || "N/A"}
           </span>
           <span className="text-base font-normal">
             <span className="font-medium text-primary">Gender: </span>
-            {user.gender}
+            {user?.gender || "N/A"}
           </span>
         </div>
       </div>
