@@ -21,14 +21,20 @@ const Profile = () => {
     };
     fetchUserData();
   }, []);
+  if (loading) {
+    return <div className="text-center">Loading...</div>;
+  }
+  const nameInitials = user?.fullName
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
   return (
     <div className="px-5 py-2">
       <h1 className="font-medium uppercase text-xl">Profile</h1>
       <div className="border mt-4 p-4 rounded">
         <div className="flex items-center justify-between">
-          <div className="h-20 w-20 rounded-full ">
-            <img src={user.profilePicture} />
-          </div>
+          <div className="h-20 w-20 rounded-full ">{nameInitials}</div>
           <span className="text-base font-normal">
             <span className="font-medium text-primary">Name: </span>
             {user.fullName}
