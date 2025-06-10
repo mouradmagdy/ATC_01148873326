@@ -30,7 +30,6 @@ const Profile = () => {
     .map((n) => n[0])
     .join("")
     .toUpperCase();
-  console.log("User data:", user);
   return (
     <div className="px-5 py-2">
       <h1 className="font-medium uppercase text-xl">Profile</h1>
